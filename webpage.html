@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan Trip — March 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --cream: #f5f0e8;
+    --red: #c0392b;
+    --gold: #c9983a;
+    --muted: #7a7060;
+    --light: #ece7dc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '日本';
+    position: absolute;
+    right: -10px;
+    top: -20px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 180px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .header h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--cream);
+  }
+
+  .header .sub {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .header .travelers {
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    padding: 14px 40px;
+    background: var(--light);
+    border-bottom: 1px solid #ddd5c4;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-confirmed { background: #2d7a4f; }
+  .dot-todo { background: var(--red); }
+  .dot-tip { background: var(--gold); }
+
+  .timeline {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  .day {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0 28px;
+    margin-bottom: 0;
+    position: relative;
+  }
+
+  .day::before {
+    content: '';
+    position: absolute;
+    left: 139px;
+    top: 28px;
+    bottom: -1px;
+    width: 1px;
+    background: linear-gradient(to bottom, #c8bfae, #e0d9ce);
+  }
+
+  .day:last-child::before { display: none; }
+
+  .day-label {
+    padding: 20px 0 0;
+    text-align: right;
+    position: relative;
+  }
+
+  .day-label::after {
+    content: '';
+    position: absolute;
+    left: calc(100% + 14px);
+    top: 27px;
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 2px solid var(--cream);
+    box-shadow: 0 0 0 1px var(--ink);
+    z-index: 1;
+  }
+
+  .day.transit .day-label::after { background: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .day.special .day-label::after { background: var(--red); box-shadow: 0 0 0 1px var(--red); }
+
+  .day-date {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .day-dow {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .day-location {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 6px;
+    font-weight: 400;
+  }
+
+  .day-content {
+    padding: 20px 0 32px;
+  }
+
+  .day-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background: white;
+    border: 1px solid #e4ddd0;
+  }
+
+  .item.todo {
+    background: #fff8f6;
+    border-color: #f0d4cf;
+  }
+
+  .item.tip {
+    background: #fdf9f0;
+    border-color: #e8d9b0;
+  }
+
+  .item-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .item-text { flex: 1; }
+
+  .item-text strong {
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .item-text .note {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 1px;
+    font-style: italic;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 2px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .tag-reserve {
+    background: #fde8e5;
+    color: var(--red);
+  }
+
+  .tag-new {
+    background: #e5f0ea;
+    color: #2d7a4f;
+  }
+
+  .section-note {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: var(--light);
+    border-left: 3px solid var(--gold);
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .footer-notes {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px 60px;
+  }
+
+  .footer-notes h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd5c4;
+  }
+
+  .notes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .note-card {
+    padding: 14px 16px;
+    background: white;
+    border: 1px solid #e4ddd0;
+    border-radius: 4px;
+  }
+
+  .note-card h3 {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .note-card p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    .timeline, .footer-notes { padding-left: 20px; padding-right: 20px; }
+    .day { grid-template-columns: 90px 1fr; gap: 0 16px; }
+    .day::before { left: 89px; }
+    .day-label::after { left: calc(100% + 8px); }
+    .notes-grid { grid-template-columns: 1fr; }
+    .header { padding: 32px 20px; }
+    .legend { padding: 12px 20px; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #f0e8d8;
+      --cream: #1a1612;
+      --muted: #9a9080;
+      --light: #262218;
+      --gold: #d4a84b;
+    }
+    .item { background: #221e18; border-color: #3a3328; }
+    .item.todo { background: #271e1c; border-color: #4a2e28; }
+    .item.tip { background: #231f14; border-color: #3a3018; }
+    .note-card { background: #221e18; border-color: #3a3328; }
+    .day-label::after { border-color: #1a1612; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="sub">Trip Itinerary · March 2025</div>
+  <h1>Japan</h1>
+  <div class="travelers">Victor + You &nbsp;·&nbsp; Tokyo · Hakone · Shinjuku &nbsp;·&nbsp; 10 nights</div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot dot-confirmed"></div> Confirmed</div>
+  <div class="legend-item"><div class="dot dot-todo"></div> Needs booking</div>
+  <div class="legend-item"><div class="dot dot-tip"></div> Suggestion / tip</div>
+</div>
+
+<div class="timeline">
+
+  <!-- THURS 3/19 -->
+  <div class="day transit">
+    <div class="day-label">
+      <div class="day-date">3/19</div>
+      <div class="day-dow">Thursday</div>
+      <div class="day-location">Ueno</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">Arrivals Day</div>
+      <div class="items">
+        <div class="item">
+          <div class="item-icon">✈️</div>
+          <div class="item-text"><strong>Victor arrives 4:30PM — Narita</strong></div>
+        </div>
+        <div class="item">
+          <div class="item-icon">✈️</div>
+          <div class="item-text"><strong>I arrive 12:45AM Friday — from Da Nang</strong></div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🍜</div>
+          <div class="item-text"><strong>Dinner near Ueno</strong>
+            <span class="note">Ameyoko street market stalls for a casual first night — yakitori, ramen, gyoza</span>
+          </div>
+        </div>
+        <div class="item tip">
+          <div class="item-icon">💡</div>
+          <div class="item-text"><strong>Konbini run on the way in</strong>
+            <span class="note">Stock up at FamilyMart/7-Eleven for the first night: onigiri, Boss Coffee, snacks for the jet lag nights.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRI 3/20 -->
+  <div class="day">
+    <div class="day-label">
+      <div class="day-date">3/20</div>
+      <div class="day-dow">Friday</div>
+      <div class="day-location">Tokyo</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">Slow Start — Akihabara & Vibes</div>
+      <div class="items">
+        <div class="item tip">
+          <div class="item-icon">😴</div>
+          <div class="item-text"><strong>Sleep in, late breakfast</strong>
+            <span class="note">Jet lag is real, no point fighting it. Slow morning with a big konbini breakfast or a kissaten (old-school coffee shop) before heading out.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🎮</div>
+          <div class="item-text"><strong>Akihabara — afternoon wander</strong><span class="tag tag-new">suggested</span>
+            <span class="note">Wild energy unlike anywhere else. Specific stops: <strong>Mandarake</strong> (7 floors, vintage + current anime goods, great for Eva and Chainsaw Man), <strong>AmiAmi Figure Tower</strong> (opened 2024, 8 floors of figures, huge Eva and CSM selection), <strong>Animate Akihabara</strong> (biggest Animate branch, good for current merch), <strong>GiGO arcade</strong> (crane games with Chainsaw Man prizes). For cat stuff: cat merchandise is everywhere but check <strong>Nekobukuro</strong> in Ikebukuro if we want an actual cat cafe on a different day.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🎌</div>
+          <div class="item-text"><strong>Kanda Myojin Shrine</strong><span class="tag tag-new">suggested</span>
+            <span class="note">5 min walk from Akihabara. A beautiful shrine that literally blesses your electronics. Quirky and uncrowded.</span>
+          </div>
+        </div>
+        <div class="item tip">
+          <div class="item-icon">🌇</div>
+          <div class="item-text"><strong>Evening: explore the neighborhood</strong>
+            <span class="note">Early night is totally fine given the travel day. Ameyoko market for a casual dinner, or just konbini and decompress. Save the energy for tomorrow.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAT 3/21 -->
+  <div class="day special">
+    <div class="day-label">
+      <div class="day-date">3/21</div>
+      <div class="day-dow">Saturday</div>
+      <div class="day-location">Tokyo Dome</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">Baseball Day ⚾</div>
+      <div class="items">
+        <div class="item">
+          <div class="item-icon">⚾</div>
+          <div class="item-text"><strong>Tokyo Dome — Game at 2PM</strong>
+            <span class="note">Getting there early to soak in the pregame energy. Grab yakitori and beer from vendors inside.</span>
+          </div>
+        </div>
+        <div class="item tip">
+          <div class="item-icon">🌇</div>
+          <div class="item-text"><strong>Morning: Jimbocho</strong><span class="tag tag-new">suggested</span>
+            <span class="note">Near Tokyo Dome. Tokyo's used bookstore district has vinyl records, vintage manga, old maps. Perfect lazy morning before the game.</span>
+          </div>
+        </div>
+        <div class="item tip">
+          <div class="item-icon">🍻</div>
+          <div class="item-text"><strong>Post-game drinks: Korakuen / Suidobashi</strong>
+            <span class="note">The area around the dome goes off after games. Stadium izakayas packed with fans in full team gear. Good spot to decompress before dinner.</span>
+          </div>
+        </div>
+        <div class="item todo">
+          <div class="item-icon">🍣</div>
+          <div class="item-text"><strong>Omakase dinner — evening</strong><span class="tag tag-reserve">reserve now</span>
+            <span class="note">Saturday night on a high from the game is the perfect energy for a splurge dinner. Book via Pocket Concierge or Tableall well in advance. Budget around ¥15k-30k/person. Ginza or Shinjuku area for easy access post-game.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUN 3/22 -->
+  <div class="day transit">
+    <div class="day-label">
+      <div class="day-date">3/22</div>
+      <div class="day-dow">Sunday</div>
+      <div class="day-location">Tokyo → Hakone</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">PokePark → Hakone</div>
+      <div class="items">
+        <div class="item">
+          <div class="item-icon">🎪</div>
+          <div class="item-text"><strong>PokePark Kanto — morning</strong>
+            <span class="note">Timed entry to Pokémon Forest 1–2PM confirmed. Hit the rest of the park in the morning.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🚌</div>
+          <div class="item-text"><strong>Travel to Hakone (~2hrs)</strong>
+            <span class="note">Highway bus or Romancecar from Shinjuku. The Romancecar has observation windows and is worth the upgrade.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">♨️</div>
+          <div class="item-text"><strong>Matsuzakaya Honten Ryokan — Check-in 3PM</strong>
+            <span class="note">Multi-course kaiseki dinner included. Onsen in the evening. Full ryokan experience, the real deal.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MON 3/23 -->
+  <div class="day transit">
+    <div class="day-label">
+      <div class="day-date">3/23</div>
+      <div class="day-dow">Monday</div>
+      <div class="day-location">Hakone → Shinjuku</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">Hakone Day + Return</div>
+      <div class="items">
+        <div class="item">
+          <div class="item-icon">⛩️</div>
+          <div class="item-text"><strong>Hakone Shrine + Lake Ashi walk</strong></div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🚡</div>
+          <div class="item-text"><strong>Ropeway (if clear weather)</strong>
+            <span class="note">Views of Fuji and volcanic Owakudani. Buy the black egg at the top, supposedly adds 7 years to your life.</span>
+          </div>
+        </div>
+        <div class="item tip">
+          <div class="item-icon">🗻</div>
+          <div class="item-text"><strong>Mt. Fuji view from Hakone</strong><span class="tag tag-new">suggested</span>
+            <span class="note">If visibility is good, this is the Fuji moment. Owakudani ropeway or Lake Ashi pirate ship both give great angles. No need for a separate Fuji excursion unless we want to chase it.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🏨</div>
+          <div class="item-text"><strong>Head to Shinjuku hotel — early check-in if possible</strong></div>
+        </div>
+        <div class="item todo">
+          <div class="item-icon">🎵</div>
+          <div class="item-text"><strong>Evening: concert or quiet Shinjuku dinner</strong>
+            <span class="note">Check RA or Songkick for shows. Or hit a Shinjuku izakaya and ease in.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TUES 3/24 -->
+  <div class="day">
+    <div class="day-label">
+      <div class="day-date">3/24</div>
+      <div class="day-dow">Tuesday</div>
+      <div class="day-location">Shibuya / Meguro</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">Amam Dacotan + Shibuya + Shimokitazawa</div>
+      <div class="items">
+        <div class="item">
+          <div class="item-icon">🥐</div>
+          <div class="item-text"><strong>Amam Dacotan — Omotesando (opening, ~10:30AM)</strong>
+            <span class="note">Line up before the 11am opening at the Omotesando location (3-7-6 Kitaaoyama, 1 min from station). Over 140 baked goods daily. Key picks: pistachio maritozzo, mentaiko baguette, Dacotan Burger. Lines can hit an hour but worth it. Buy an omakase box to carry with us.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🎵</div>
+          <div class="item-text"><strong>Tower Records Shibuya</strong>
+            <span class="note">9 floors of music. Japanese pressings, city pop, jazz, experimental. Budgeting extra time here for sure.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🎮</div>
+          <div class="item-text"><strong>Pokemon Center Shibuya</strong>
+            <span class="note">Hit this early before crowds build up. Grab merch, plushies, limited Shibuya exclusives.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">📸</div>
+          <div class="item-text"><strong>Tokyo Photographic Art Museum (TOP)</strong><span class="tag tag-new">suggested</span>
+            <span class="note">In Ebisu, a 10-min walk from Shibuya. World-class photography exhibitions in a beautiful space. Usually 2-3 shows running at once.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🎸</div>
+          <div class="item-text"><strong>Shimokitazawa — evening</strong><span class="tag tag-new">suggested</span>
+            <span class="note">The real indie music neighborhood in Tokyo (20 min from Shibuya). Dozens of tiny live venues, vinyl shops, vintage clothing, great cafes. Much more the vibe than Meguro for this. Bookoff Plus in Meguro is still worth a stop for used vinyl during the day.</span>
+          </div>
+        </div>
+        <div class="item tip">
+          <div class="item-icon">🥂</div>
+          <div class="item-text"><strong>High-rise bar</strong><span class="tag tag-new">suggested</span>
+            <span class="note">Shibuya Sky (Scramble Square 46F) is a rooftop observation deck worth doing at sunset. For drinks, the New York Bar at Park Hyatt Shinjuku (the Lost in Translation bar) is iconic. Or Bar High Five in Ginza for serious cocktails.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEDS 3/25 -->
+  <div class="day special">
+    <div class="day-label">
+      <div class="day-date">3/25</div>
+      <div class="day-dow">Wednesday</div>
+      <div class="day-location">Ariake</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">Ossan Rental + Small Worlds 🌟</div>
+      <div class="items">
+        <div class="item todo">
+          <div class="item-icon">👴</div>
+          <div class="item-text"><strong>Ossan Rental — morning</strong><span class="tag tag-reserve">reserve now</span>
+            <span class="note">Book at ossan.com — rent a middle-aged Japanese man for ¥1,000/hr to hang out, give advice, or wander with us. Wildly fun. Book a 2-3hr morning slot.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🔬</div>
+          <div class="item-text"><strong>Small Worlds Tokyo — afternoon</strong><span class="tag tag-reserve">book ahead</span>
+            <span class="note">In Ariake (Yurikamome line, Ariake-Tennis-no-Mori sta). Two full Evangelion areas: the NERV hangar with Unit-00/01/02 launching, and miniature Tokyo-III with the city sinking underground when Angels attack. Also Sailor Moon, Space Center, and a fantasy Global Village. The day/night cycle changes every 30 min. Pro move: pay for the Figure Residency and get a 1/80-scale 3D scan of yourself placed in the Eva exhibit for a year.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THURS 3/26 -->
+  <div class="day">
+    <div class="day-label">
+      <div class="day-date">3/26</div>
+      <div class="day-dow">Thursday</div>
+      <div class="day-location">Ueno / Yanaka</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">Sakura + Yanaka Stroll</div>
+      <div class="items">
+        <div class="item">
+          <div class="item-icon">🌸</div>
+          <div class="item-text"><strong>Ueno Park — sakura picnic</strong>
+            <span class="note">Konbini haul in the morning, blanket in the park. Late March should be peak bloom. Getting there before 11am for a good spot.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🏘️</div>
+          <div class="item-text"><strong>Yanaka — afternoon wander</strong>
+            <span class="note">Old Tokyo neighborhood that survived the war. Yanaka Ginza shotengai for snacks: melon pan, curry bread, taiyaki. Feels like stepping back 60 years.</span>
+          </div>
+        </div>
+        <div class="item tip">
+          <div class="item-icon">🎨</div>
+          <div class="item-text"><strong>Yanaka Cemetery</strong><span class="note">Sounds strange but it's genuinely beautiful. Tree-lined paths, old tombstones, very peaceful especially with sakura overhead.</span></div>
+        </div>
+        <div class="item tip">
+          <div class="item-icon">☕</div>
+          <div class="item-text"><strong>Kayaba Coffee</strong><span class="tag tag-new">suggested</span>
+            <span class="note">Legendary old-school kissaten in Yanaka, open since 1938. Egg salad sandwich and coffee is the move before heading to Asakusa.</span>
+          </div>
+        </div>
+        <div class="item todo">
+          <div class="item-icon">🦦</div>
+          <div class="item-text"><strong>Otter Cafe — Harry Asakusa</strong><span class="tag tag-reserve">reserve now</span>
+            <span class="note">Natural loop from Yanaka: Asakusa is just 15 min walk or one stop east. Harry Asakusa (opened 2023) is the best-reviewed branch. Feed and interact with Asian small-clawed otters. Book via harinezumi-cafe.com, around ¥1,500 for 30 mins.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🥢</div>
+          <div class="item-text"><strong>Chopstick making workshop — Asakusa</strong><span class="tag tag-new">suggested</span>
+            <span class="note">Pair it with the otter cafe since we're already in Asakusa. 60-90 min workshops, search "chopstick making Tokyo" on Airbnb Experiences or Voyagin.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRI 3/27 -->
+  <div class="day">
+    <div class="day-label">
+      <div class="day-date">3/27</div>
+      <div class="day-dow">Friday</div>
+      <div class="day-location">Shinjuku</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">Shinjuku Full Day + Jazz Night</div>
+      <div class="items">
+        <div class="item">
+          <div class="item-icon">🌿</div>
+          <div class="item-text"><strong>Shinjuku Gyoen — morning</strong>
+            <span class="note">One of Tokyo's best parks, beautiful in late March sakura season. Alcohol technically not allowed (unlike Ueno) but very serene and worth it.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🏛️</div>
+          <div class="item-text"><strong>Tokyo Metropolitan Government Building — afternoon</strong><span class="tag tag-new">suggested</span>
+            <span class="note">Free observation deck on the 45th floor, one of the best views in Tokyo. Two towers, both worth going up. Gets great late afternoon light. 5 min walk from Shinjuku station west exit.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🍢</div>
+          <div class="item-text"><strong>Omoide Yokocho — late afternoon into evening</strong>
+            <span class="note">"Memory Lane" — narrow alley of tiny yakitori stalls, smoke-filled and nostalgic. Better in the late afternoon before the full evening rush. Grab skewers and a beer, then wander into Golden Gai after.</span>
+          </div>
+        </div>
+        <div class="item tip">
+          <div class="item-icon">🌃</div>
+          <div class="item-text"><strong>Golden Gai + Kabukicho wander</strong>
+            <span class="note">A maze of 200+ tiny bars, each seats 6-8 people. Wander in, pick a vibe. Some have a ¥500 cover charge. Then walk through Kabukicho for the full neon-drenched chaos experience.</span>
+          </div>
+        </div>
+        <div class="item todo">
+          <div class="item-icon">🎷</div>
+          <div class="item-text"><strong>Jazz bar — late night</strong><span class="tag tag-new">suggested</span>
+            <span class="note">Cap the last full night with live jazz. Top picks: <strong>Shinjuku Pit Inn</strong> (legendary basement venue since 1966, best musicians in Japan, shows ¥3,000-5,500), <strong>Jazz Cafe DUG</strong> (Haruki Murakami's old haunt, very atmospheric), or <strong>Jazz Bar Samurai</strong> (cozy, hundreds of maneki neko cats, signed album covers everywhere).</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAT 3/28 -->
+  <div class="day transit">
+    <div class="day-label">
+      <div class="day-date">3/28</div>
+      <div class="day-dow">Saturday</div>
+      <div class="day-location">→ Airport</div>
+    </div>
+    <div class="day-content">
+      <div class="day-title">Sayonara 🛫</div>
+      <div class="items">
+        <div class="item">
+          <div class="item-icon">🍳</div>
+          <div class="item-text"><strong>Morning breakfast — somewhere good</strong>
+            <span class="note">A proper kissaten morning set (toast, egg, coffee, salad) at a local spot. Slow and grateful.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🛍️</div>
+          <div class="item-text"><strong>Last konbini run / gift shopping</strong>
+            <span class="note">Tokyo Banana, KitKat flavors, matcha snacks. Airport prices are actually fine for most of this stuff.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">✈️</div>
+          <div class="item-text"><strong>Head to airport</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-notes">
+  <h2>Reservations & Reminders</h2>
+  <div class="notes-grid">
+    <div class="note-card">
+      <h3>🔴 Book Now</h3>
+      <p><strong>Omakase dinner</strong> — Pocket Concierge or Tableall, target 3/21 Saturday post-baseball. Book well in advance.<br><br>
+      <strong>Small Worlds Tokyo</strong> — book timed entry at smallworlds.jp, can sell out on weekends<br><br>
+      <strong>Otter Cafe (Harry Asakusa)</strong> — book via harinezumi-cafe.com, min 60 min reservation<br><br>
+      <strong>Ossan Rental</strong> — ossan.com, Japanese interface, book as early as possible<br><br>
+      <strong>Chopstick workshop</strong> — Airbnb Experiences or Voyagin, "chopstick making Tokyo", pair with Asakusa on 3/26</p>
+    </div>
+    <div class="note-card">
+      <h3>🟡 Notes and Tips</h3>
+      <p><strong>Amam Dacotan</strong> — CLOSED Wednesdays. Going Tuesday 3/24 morning; arrive by 10:30 for 11am open<br><br>
+      <strong>Small Worlds location</strong> — technically Ariake (near Odaiba) but worth the Yurikamome ride; Eva exhibit alone is incredible<br><br>
+      <strong>Owakudani black eggs</strong> — buy on the Hakone ropeway (3/23), supposedly 7 years added per egg<br><br>
+      <strong>IC Card (Suica/Pasmo)</strong> — load ¥5,000 on arrival at the airport, use it everywhere</p>
+    </div>
+    <div class="note-card">
+      <h3>🎷 Jazz Night Options</h3>
+      <p><strong>Shinjuku Pit Inn</strong> — legendary basement club since 1966, best musicians in Japan, evening shows ¥3,000-5,500. The classic choice.<br><br>
+      <strong>Jazz Cafe DUG</strong> — Haruki Murakami's old haunt in Shinjuku, brick interior, very atmospheric<br><br>
+      <strong>Jazz Bar Samurai</strong> — cozy, hundreds of maneki neko cats, signed album covers, good for a first jazz bar experience</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
