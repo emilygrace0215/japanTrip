@@ -321,6 +321,102 @@
     .legend { padding: 12px 20px; }
   }
 
+  .packing-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 40px 8px;
+  }
+
+  .packing-section h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .packing-section .packing-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 18px;
+    font-style: italic;
+  }
+
+  .packing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .packing-card {
+    padding: 14px 16px;
+    background: white;
+    border: 1px solid #e4ddd0;
+    border-radius: 4px;
+  }
+
+  .packing-card h3 {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .packing-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .packing-card ul li {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .packing-card ul li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--gold);
+    font-weight: 800;
+  }
+
+  .packing-card.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .packing-weather {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: var(--light);
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+
+  .packing-weather .pw-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .packing-weather .pw-label {
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 9px;
+    color: var(--gold);
+  }
+
+  @media (max-width: 640px) {
+    .packing-section { padding-left: 20px; padding-right: 20px; }
+    .packing-grid { grid-template-columns: 1fr; }
+  }
+
   @media (prefers-color-scheme: dark) {
     :root {
       --ink: #f0e8d8;
@@ -333,6 +429,8 @@
     .item.todo { background: #271e1c; border-color: #4a2e28; }
     .item.tip { background: #231f14; border-color: #3a3018; }
     .note-card { background: #221e18; border-color: #3a3328; }
+    .packing-card { background: #221e18; border-color: #3a3328; }
+    .packing-weather { background: #262218; }
     .day-label::after { border-color: #1a1612; }
   }
 </style>
@@ -349,6 +447,70 @@
   <div class="legend-item"><div class="dot dot-confirmed"></div> Confirmed</div>
   <div class="legend-item"><div class="dot dot-todo"></div> Needs booking</div>
   <div class="legend-item"><div class="dot dot-tip"></div> Suggestion / tip</div>
+</div>
+
+<div class="packing-section">
+  <h2>🧳 Packing List</h2>
+  <div class="packing-sub">Late March in Tokyo averages (43–57°F) — chilly mornings, mild afternoons, cool evenings. Hakone runs colder at elevation. Layers.</div>
+
+  <div class="packing-weather">
+    <div class="pw-item"><span class="pw-label">Tokyo</span> 43–57°F</div>
+    <div class="pw-item"><span class="pw-label">Hakone</span> 32–50°F</div>
+    <div class="pw-item"><span class="pw-label">Rain chance</span> ~30%, light showers</div>
+    <div class="pw-item"><span class="pw-label">Sakura</span> starts blooming ~Mar 20</div>
+  </div>
+
+  <div class="packing-grid">
+    <div class="packing-card">
+      <h3>☁️ Layers & Outerwear</h3>
+      <ul>
+        <li>Medium-weight jacket or trench coat (main outer layer)</li>
+        <li>Packable light down or puffer for Hakone &amp; evenings</li>
+        <li>Hoodie or fleece midlayer</li>
+        <li>Long-sleeve shirts &amp; tees for layering</li>
+        <li>1–2 short-sleeve tees for warm afternoons</li>
+        <li>Light scarf (doubles for temple visits &amp; windy Lake Ashi)</li>
+      </ul>
+    </div>
+    <div class="packing-card">
+      <h3>👖 Bottoms & Shoes</h3>
+      <ul>
+        <li>Comfortable jeans (2 pairs)</li>
+        <li>Sweats or joggers for travel days &amp; ryokan</li>
+        <li>Walking shoes that are broken in — you'll hit 15k+ steps daily</li>
+        <li>A pair that slips on/off easily (temples, ryokan, fitting rooms)</li>
+        <li>Socks you don't mind showing — shoes come off a lot in Japan</li>
+      </ul>
+    </div>
+    <div class="packing-card">
+      <h3>🌧️ Rain & Essentials</h3>
+      <ul>
+        <li>Compact umbrella (or buy a clear one at any konbini for ¥500)</li>
+        <li>Light rain shell or waterproof layer</li>
+        <li>Small crossbody bag or daypack</li>
+        <li>Reusable water bottle</li>
+        <li>Sunglasses (spring sun is bright, especially at Lake Ashi)</li>
+      </ul>
+    </div>
+    <div class="packing-card">
+      <h3>♨️ Onsen & Ryokan</h3>
+      <ul>
+        <li>The ryokan provides yukata, slippers, and towels</li>
+        <li>Bring your own small washcloth for the onsen if you prefer</li>
+        <li>Moisturizer — the mineral water + dry spring air can dry you out</li>
+      </ul>
+    </div>
+    <div class="packing-card">
+      <h3>📱 Tech & Documents</h3>
+      <ul>
+        <li>Portable charger — long walking days drain your phone</li>
+        <li>Universal adapter (Japan uses Type A, same as US)</li>
+        <li>Visit Japan Web customs form (fill out before landing)</li>
+        <li>Passport, flight confirmations, Airbnb check-in details</li>
+        <li>Suica/Pasmo IC card or Apple Wallet Suica</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <div class="timeline">
